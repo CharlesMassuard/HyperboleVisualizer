@@ -17,7 +17,7 @@ def send_csv_to_client(filename, host, port):
         for line in file:
             conn.sendall(line.encode())  # Envoi de la ligne
             print(f"Envoyé: {line.strip()}")
-            time.sleep(1)  # Attendre 1 seconde avant d'envoyer la prochaine ligne
+            time.sleep(0.01)  # Attendre 0.01 seconde avant d'envoyer la prochaine ligne
 
     print("Fichier envoyé avec succès.")
     conn.close()

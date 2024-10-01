@@ -1,6 +1,6 @@
 import sys
 import socket
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter, QPen
 import argparse
@@ -56,32 +56,56 @@ class ClientApp(QMainWindow):
         self.ma_liste_dataline = []
         self.current_index = 0
 
-        self.setMinimumSize(800, 800)
+        # Obtenir la taille de l'écran
+        screen = QApplication.primaryScreen().geometry()
+        screen_width = screen.width()
+        screen_height = screen.height()
+
+        # Définir la taille minimale de la fenêtre en fonction de la taille de l'écran
+        self.setMinimumSize(int(screen_width*0.8), int(screen_height*0.8))
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         self.btn_start = QPushButton("Démarrer la réception", self)
         self.btn_start.clicked.connect(self.start_receiving)
 
-        self.canvas = Canvas(self)
-        self.canvas.setMinimumSize(600, 600)
+        self.map = Canvas(self)
+        self.map.setMinimumSize(600, 600)
+        self.map.setMaximumSize(600, 600)
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.canvas)
-        layout.addWidget(self.btn_start)
+        # Layout pour les informations à droite
+        info_layout = QVBoxLayout()
+        info_layout.addWidget(QLabel("Information 1"))
+        info_layout.addWidget(QLabel("Information 2"))
+        info_layout.addWidget(QLabel("Information 3"))
+        info_layout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+        # Layout principal
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(self.map)
+        main_layout.addLayout(info_layout)
+
+        # Layout pour le bouton en bas
+        bottom_layout = QVBoxLayout()
+        bottom_layout.addLayout(main_layout)
+        bottom_layout.addWidget(self.btn_start)
 
         container = QWidget()
-        container.setLayout(layout)
+        container.setLayout(bottom_layout)
         self.setCentralWidget(container)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_canvas)
 
+        #Lancement automatique reception (+ simple pour debug)
+        self.start_receiving()
+
     def start_receiving(self):
         try:
             self.client_socket.connect((self.ip, self.port))
             print("Connecté au serveur.")
-            self.timer.start(1000)  
+            self.btn_start.setText("Réception en cours...")
+            self.timer.start(10) #0.01s 
         except Exception as e:
             print(f"Erreur de connexion : {e}")
 
@@ -103,10 +127,10 @@ class ClientApp(QMainWindow):
                         dataline = Dataline(*float_parts)
                         self.ma_liste_dataline.append(dataline)
 
-                        self.canvas.latitudes.append(dataline.d_lat)
-                        self.canvas.longitudes.append(dataline.d_lon)
+                        self.map.latitudes.append(dataline.d_lat)
+                        self.map.longitudes.append(dataline.d_lon)
 
-                        self.canvas.update()
+                        self.map.update()
 
                     except ValueError as e:
                         print(f"Erreur de conversion : {e}")

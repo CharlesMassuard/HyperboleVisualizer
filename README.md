@@ -30,5 +30,8 @@ Afin de lancer la simulation sur votre machine, avec le serveur et le client sur
 sh lancement.sh
 ```
 
-> [!NOTE]
-> Cela va lancer deux nouveaux terminaux
+Afin de lancer en mode **DEBUG** et ne pas fermer les terminaux à la fin de l'execution : 
+
+```sh
+sh lancement.sh True
+```
