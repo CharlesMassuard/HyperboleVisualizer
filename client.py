@@ -13,6 +13,9 @@ class Dataline:
         self.seconde = args[3]
         self.d_lat = args[4]
         self.d_lon = args[5]
+        self.volt = args[14]
+        self.ampere = args[15]
+        self.vitesse = args[16]
 
 class Canvas(QWidget):
     def __init__(self, parent=None):
@@ -74,11 +77,14 @@ class ClientApp(QMainWindow):
         self.map.setMaximumSize(600, 600)
 
         # Layout pour les informations à droite
+        self.vitesse = QLabel("Vitesse : 0km/h")
+        self.volt = QLabel("Tension : 0V")
+        self.ampere = QLabel("Courant : 0A")
+
         info_layout = QVBoxLayout()
-        info_layout.addWidget(QLabel("Information 1"))
-        info_layout.addWidget(QLabel("Information 2"))
-        info_layout.addWidget(QLabel("Information 3"))
-        info_layout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        info_layout.addWidget(self.vitesse)
+        info_layout.addWidget(self.volt)
+        info_layout.addWidget(self.ampere)
 
         # Layout principal
         main_layout = QHBoxLayout()
@@ -129,6 +135,10 @@ class ClientApp(QMainWindow):
 
                         self.map.latitudes.append(dataline.d_lat)
                         self.map.longitudes.append(dataline.d_lon)
+
+                        self.vitesse.setText(f"Vitesse : {dataline.vitesse} km/h")
+                        self.volt.setText(f"Tension : {dataline.volt} V")
+                        self.ampere.setText(f"Courant : {dataline.ampere} A")
 
                         self.map.update()
 
