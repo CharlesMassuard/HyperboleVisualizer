@@ -3,6 +3,7 @@ import socket
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter, QPen
+import argparse
 
 class Dataline:
     def __init__(self, *args):
@@ -45,8 +46,11 @@ class Canvas(QWidget):
                 painter.drawPoint(int(x), int(y))
 
 class ClientApp(QMainWindow):
-    def __init__(self):
+    def __init__(self, ip, port):
         super().__init__()
+
+        self.ip = ip
+        self.port = port
 
         self.setWindowTitle("Client PyQt5 - Affichage des points")
         self.ma_liste_dataline = []
@@ -75,7 +79,7 @@ class ClientApp(QMainWindow):
 
     def start_receiving(self):
         try:
-            self.client_socket.connect(('192.168.13.126', 12345))
+            self.client_socket.connect((self.ip, self.port))
             print("Connecté au serveur.")
             self.timer.start(1000)  
         except Exception as e:
@@ -116,7 +120,12 @@ class ClientApp(QMainWindow):
         super().closeEvent(event)
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="IP du serveur")
+    parser.add_argument("ip_serveur", type=str, nargs='?', default='127.0.0.1', help="Adresse IP du serveur depuis lequel on souhaite recevoir les données")
+    parser.add_argument("port", type=int, nargs='?', default=12345, help="Port du serveur depuis lequel on souhaite recevoir les données")
+    args = parser.parse_args()
+    print(f"Connexion au serveur {args.ip_serveur}:{args.port}")
     app = QApplication(sys.argv)
-    window = ClientApp()
+    window = ClientApp(ip=args.ip_serveur, port=args.port)
     window.show()
     sys.exit(app.exec_())

@@ -1,7 +1,8 @@
 import socket
 import time
+import argparse
 
-def send_csv_to_client(filename, host='192.168.13.125', port=12356):
+def send_csv_to_client(filename, host, port):
     # Création du socket serveur
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
@@ -25,4 +26,9 @@ def send_csv_to_client(filename, host='192.168.13.125', port=12356):
 if __name__ == "__main__":
     # Nom du fichier CSV à envoyer
     csv_file = 'output.csv'
-    send_csv_to_client(csv_file)
+    parser = argparse.ArgumentParser(description="IP Serveur")
+    parser.add_argument("ip_serveur", type=str, nargs='?', default='127.0.0.1', help="Adresse IP du serveur")
+    parser.add_argument("port", type=int, nargs='?', default=12345, help="Port du serveur")
+    args = parser.parse_args()
+    print(f"Ouverture du serveur {args.ip_serveur}:{args.port}")
+    send_csv_to_client(csv_file, args.ip_serveur, args.port)
