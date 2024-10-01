@@ -16,10 +16,11 @@ python3 ./client.py {adresse_serveur} {port_serveur}
 > Le serveur doit être lancé **avant** le client. Un terminal différent doit être utilisé pour le serveur et le client.
 
 > [!NOTE]
-> Les valeurs par défaut sont :
-> IP: 127.0.0.1
-> Port : 12345
+> Les valeurs par défaut sont : <br>
+> IP: 127.0.0.1 <br>
+> Port : 12345 <br>
 > *Cela fonctionne donc pour une execution en local, avaec le client et le serveur sur la même machine*
+
 
 ## Lancement automatique sur une même machine
 
