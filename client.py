@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout,
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter, QPen
 import argparse
+import time
 
 class Dataline:
     def __init__(self, *args):
@@ -70,6 +71,7 @@ class ClientApp(QMainWindow):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         self.btn_start = QPushButton("Démarrer la réception", self)
+        self.btn_start.setStyleSheet("background-color: black; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
         self.btn_start.clicked.connect(self.start_receiving)
 
         self.map = Canvas(self)
@@ -89,6 +91,7 @@ class ClientApp(QMainWindow):
         # Layout principal
         main_layout = QHBoxLayout()
         main_layout.addWidget(self.map)
+        main_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
         main_layout.addLayout(info_layout)
 
         # Layout pour le bouton en bas
@@ -103,17 +106,34 @@ class ClientApp(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_canvas)
 
+        self.btn_text_timer = QTimer()
+        self.btn_text_timer.timeout.connect(self.change_button_text)
+
         #Lancement automatique reception (+ simple pour debug)
-        self.start_receiving()
+        # self.start_receiving()
 
     def start_receiving(self):
         try:
             self.client_socket.connect((self.ip, self.port))
             print("Connecté au serveur.")
-            self.btn_start.setText("Réception en cours...")
+            self.btn_start.setDisabled(True)
+            self.btn_start.setText("Réception en cours") 
             self.timer.start(10) #0.01s 
+            self.btn_text_timer.start(1000)
         except Exception as e:
             print(f"Erreur de connexion : {e}")
+
+    def change_button_text(self):
+        current_text = self.btn_start.text()
+        match current_text:
+            case "Réception en cours":
+                self.btn_start.setText("Réception en cours.")
+            case "Réception en cours.":
+                self.btn_start.setText("Réception en cours..")
+            case "Réception en cours..":
+                self.btn_start.setText("Réception en cours...")
+            case _ :
+               self.btn_start.setText("Réception en cours") 
 
     def update_canvas(self):
         try:
@@ -123,6 +143,11 @@ class ClientApp(QMainWindow):
 
                 if "index" in line:
                     return
+                
+                if line == "Fin transmission":
+                    self.close_connection()
+                    return
+
                 
                 parts = line.strip().split(';')
                 if len(parts) == 20:
@@ -147,11 +172,28 @@ class ClientApp(QMainWindow):
         except Exception as e:
             print(f"Erreur lors de la réception des données : {e}")
 
-    def closeEvent(self, event):
-        """ Arrêter le timer et fermer le socket à la fermeture de l'application """
+    def close_connection(self):
+        """ Fermer le socket et arrêter le timer sans fermer l'application """
         self.timer.stop()
+        self.btn_text_timer.stop()
         self.client_socket.close()
-        super().closeEvent(event)
+
+        # Réinitialiser les informations
+        self.vitesse.setText("Vitesse : 0km/h")
+        self.volt.setText("Tension : 0V")
+        self.ampere.setText("Courant : 0A")
+        self.btn_start.setText("Réception terminée")
+        self.btn_start.setStyleSheet("background-color: green; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
+        
+        # Utiliser un QTimer pour retarder la modification du texte du bouton
+        QTimer.singleShot(3000, self.reset_button_text)
+
+    def reset_button_text(self):
+        """ Réinitialiser le texte et le style du bouton après 3 secondes """
+        self.btn_start.setDisabled(False)
+        self.btn_start.setText("Démarrer la réception")
+        self.btn_start.setStyleSheet("background-color: black; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="IP du serveur")
