@@ -184,15 +184,6 @@ class ClientApp(QMainWindow):
         self.ampere.setText("Courant : 0A")
         self.btn_start.setText("Réception terminée")
         self.btn_start.setStyleSheet("background-color: green; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
-        
-        # Utiliser un QTimer pour retarder la modification du texte du bouton
-        QTimer.singleShot(3000, self.reset_button_text)
-
-    def reset_button_text(self):
-        """ Réinitialiser le texte et le style du bouton après 3 secondes """
-        self.btn_start.setDisabled(False)
-        self.btn_start.setText("Démarrer la réception")
-        self.btn_start.setStyleSheet("background-color: black; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
 
 
 if __name__ == '__main__':
