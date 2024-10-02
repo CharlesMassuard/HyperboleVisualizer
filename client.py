@@ -9,9 +9,9 @@ import time
 class Dataline:
     def __init__(self, *args):
         self.index = args[0]
-        self.heure = args[1]
-        self.minute = args[2]
-        self.seconde = args[3]
+        self.heure = int(args[1])
+        self.minute = int(args[2])
+        self.seconde = int(args[3])
         self.d_lat = args[4]
         self.d_lon = args[5]
         self.volt = args[14]
@@ -67,6 +67,10 @@ class ClientApp(QMainWindow):
 
         # Définir la taille minimale de la fenêtre en fonction de la taille de l'écran
         self.setMinimumSize(int(screen_width*0.8), int(screen_height*0.8))
+        self.move(
+            (screen_width - self.width()) // 2,
+            (screen_height - self.height()) // 2
+        )
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -79,32 +83,54 @@ class ClientApp(QMainWindow):
         self.map.setMaximumSize(600, 600)
 
         # Layout pour les informations à droite
+        self.date = QLabel(f"{time.strftime('%d/%m/%Y %H:%M:%S')}")
+        self.date.setAlignment(Qt.AlignCenter)
+        self.date.setStyleSheet("font-size: 18px;")
+
+        self.heure = QLabel("Heure de la capture : N/A")
+        self.heure.setStyleSheet("font-size: 18px;")
+
+        self.coords = QLabel("Coordonnées : N/A")
+        self.coords.setStyleSheet("font-size: 18px;")
+
         self.vitesse = QLabel("Vitesse : 0km/h")
+        self.vitesse.setStyleSheet("font-size: 18px;")
+
         self.volt = QLabel("Tension : 0V")
+        self.volt.setStyleSheet("font-size: 18px;")
+
         self.ampere = QLabel("Courant : 0A")
+        self.ampere.setStyleSheet("font-size: 18px;")
 
         info_layout = QVBoxLayout()
+        info_layout.addWidget(self.heure)
+        info_layout.addWidget(self.coords)
         info_layout.addWidget(self.vitesse)
         info_layout.addWidget(self.volt)
         info_layout.addWidget(self.ampere)
 
         # Layout principal
-        main_layout = QHBoxLayout()
-        main_layout.addWidget(self.map)
-        main_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        main_layout.addLayout(info_layout)
+        center_layout = QHBoxLayout()
+        center_layout.addWidget(self.map)
+        center_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        center_layout.addLayout(info_layout)
 
         # Layout pour le bouton en bas
-        bottom_layout = QVBoxLayout()
-        bottom_layout.addLayout(main_layout)
-        bottom_layout.addWidget(self.btn_start)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self.date)
+        main_layout.addLayout(center_layout)
+        main_layout.addWidget(self.btn_start)
 
         container = QWidget()
-        container.setLayout(bottom_layout)
+        container.setLayout(main_layout)
         self.setCentralWidget(container)
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_canvas)
+
+        self.heure_timer = QTimer()
+        self.heure_timer.timeout.connect(lambda: self.date.setText(f"{time.strftime('%d/%m/%Y %H:%M:%S')}"))
+        self.heure_timer.start(1000)
 
         self.btn_text_timer = QTimer()
         self.btn_text_timer.timeout.connect(self.change_button_text)
@@ -118,7 +144,7 @@ class ClientApp(QMainWindow):
             print("Connecté au serveur.")
             self.btn_start.setDisabled(True)
             self.btn_start.setText("Réception en cours") 
-            self.timer.start(10) #0.01s 
+            self.timer.start(1000) #0.01s 
             self.btn_text_timer.start(1000)
         except Exception as e:
             print(f"Erreur de connexion : {e}")
@@ -161,6 +187,8 @@ class ClientApp(QMainWindow):
                         self.map.latitudes.append(dataline.d_lat)
                         self.map.longitudes.append(dataline.d_lon)
 
+                        self.heure.setText(f"Heure de la capture : {dataline.heure}:{dataline.minute}:{dataline.seconde}")
+                        self.coords.setText(f"Coordonnées : {round(dataline.d_lat, 5)}:{round(dataline.d_lon, 5)}")
                         self.vitesse.setText(f"Vitesse : {dataline.vitesse} km/h")
                         self.volt.setText(f"Tension : {dataline.volt} V")
                         self.ampere.setText(f"Courant : {dataline.ampere} A")
