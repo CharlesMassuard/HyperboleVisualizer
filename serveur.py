@@ -25,7 +25,7 @@ def send_csv_to_client(filename, host, port):
 
 if __name__ == "__main__":
     # Nom du fichier CSV à envoyer
-    csv_file = 'output.csv'
+    csv_file = 'output2.csv'
     parser = argparse.ArgumentParser(description="IP Serveur")
     parser.add_argument("ip_serveur", type=str, nargs='?', default='127.0.0.1', help="Adresse IP du serveur")
     parser.add_argument("port", type=int, nargs='?', default=12345, help="Port du serveur")
