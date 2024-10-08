@@ -23,12 +23,16 @@ class Canvas(QWidget):
         super().__init__(parent)
         self.latitudes = []
         self.longitudes = []
+        self.image = QPixmap("./imgs/Circuit.bmp")
 
     def paintEvent(self, event):
         """ Redéfinir paintEvent pour dessiner les points """
         painter = QPainter(self)
         pen = QPen(Qt.black, 3)  
         painter.setPen(pen)
+
+        if not self.image.isNull():
+            painter.drawPixmap(self.rect(), self.image)
 
         if self.latitudes and self.longitudes:
             min_lat = min(self.latitudes)
@@ -139,7 +143,7 @@ class ClientApp(QMainWindow):
         self.btn_text_timer.timeout.connect(self.change_button_text)
 
         #Lancement automatique reception (+ simple pour debug)
-        # self.start_receiving()
+        self.start_receiving()
 
     def start_receiving(self):
         try:
