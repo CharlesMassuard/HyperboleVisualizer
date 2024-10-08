@@ -104,12 +104,16 @@ class ClientApp(QMainWindow):
         self.ampere = QLabel("Courant : 0A")
         self.ampere.setStyleSheet("font-size: 18px;")
 
+        self.watt = QLabel("Puissance : 0W")
+        self.watt.setStyleSheet("font-size: 18px;")
+
         info_layout = QVBoxLayout()
         info_layout.addWidget(self.heure)
         info_layout.addWidget(self.coords)
         info_layout.addWidget(self.vitesse)
         info_layout.addWidget(self.volt)
         info_layout.addWidget(self.ampere)
+        info_layout.addWidget(self.watt)
 
         # Layout principal
         center_layout = QHBoxLayout()
@@ -200,6 +204,7 @@ class ClientApp(QMainWindow):
                         self.vitesse.setText(f"Vitesse : {dataline.vitesse} km/h")
                         self.volt.setText(f"Tension : {dataline.volt} V")
                         self.ampere.setText(f"Courant : {dataline.ampere} A")
+                        self.watt.setText(f"Puissance : {round(dataline.volt * dataline.ampere, 2)} W")
 
                         self.map.update()
 
