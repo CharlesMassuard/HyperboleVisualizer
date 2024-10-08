@@ -176,6 +176,7 @@ class ClientApp(QMainWindow):
                     self.close_connection()
                     return
                 
+                #ecriture de la ligne dans le CSV généré côté client
                 with open(self.nom_fichier, 'a') as file:
                     file.write(line)
 
