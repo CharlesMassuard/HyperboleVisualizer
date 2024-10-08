@@ -2,7 +2,7 @@
 
 Dans le cadre de la participation au Shell Eco Marathon Europe, l’association Hyperbole souhaite recueillir en temps réel les données de contrôle de son prototype : vitesse, ampérage, watts consommés, position GPS etc…
 
-## Membres du groupe
+## Membres du groupe
 
 - Sevellec Maxime
 - Villain Théo
