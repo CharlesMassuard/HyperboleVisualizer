@@ -135,6 +135,8 @@ class ClientApp(QMainWindow):
         self.btn_text_timer = QTimer()
         self.btn_text_timer.timeout.connect(self.change_button_text)
 
+        self.nom_fichier = f"output_{time.strftime('%Y%m%d_%H%M%S')}.csv"
+
         #Lancement automatique reception (+ simple pour debug)
         # self.start_receiving()
 
@@ -173,6 +175,9 @@ class ClientApp(QMainWindow):
                 if line == "Fin transmission":
                     self.close_connection()
                     return
+                
+                with open(self.nom_fichier, 'w') as file:
+                    file.write(line)
 
                 
                 parts = line.strip().split(';')
