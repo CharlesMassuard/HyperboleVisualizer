@@ -5,7 +5,7 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter, QPen
 import argparse
 import time
-from variables import TEMPS_ATTENTE
+from variables import TEMPS_ATTENTE, GENERE_CSV
 
 class Dataline:
     def __init__(self, *args):
@@ -177,9 +177,10 @@ class ClientApp(QMainWindow):
                     self.close_connection()
                     return
                 
-                #ecriture de la ligne dans le CSV généré côté client
-                with open(self.nom_fichier, 'a') as file:
-                    file.write(line)
+                if(GENERE_CSV):
+                    #ecriture de la ligne dans le CSV généré côté client
+                    with open(self.nom_fichier, 'a') as file:
+                        file.write(line)
 
                 
                 parts = line.strip().split(';')
