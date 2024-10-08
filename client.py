@@ -2,7 +2,7 @@ import sys
 import socket
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt5.QtCore import QTimer, Qt
-from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtGui import QPainter, QPen, QPixmap
 import argparse
 import time
 
@@ -23,31 +23,39 @@ class Canvas(QWidget):
         super().__init__(parent)
         self.latitudes = []
         self.longitudes = []
+        self.image = QPixmap("circuit.png")  # Remplacez par le chemin de votre image
+
+        # Limites géographiques de l'image (à ajuster en fonction de la carte)
+        self.min_lat = 40.7128  # Exemple : latitude minimale
+        self.max_lat = 40.7486  # Exemple : latitude maximale
+        self.min_lon = -74.0060  # Exemple : longitude minimale
+        self.max_lon = -73.9352  # Exemple : longitude maximale
 
     def paintEvent(self, event):
-        """ Redéfinir paintEvent pour dessiner les points """
+        """ Redéfinir paintEvent pour dessiner l'image de fond et les points ajustés """
         painter = QPainter(self)
-        pen = QPen(Qt.black, 3)  
+
+        # Dessiner l'image de fond (elle sera redimensionnée pour remplir le widget)
+        if not self.image.isNull():
+            painter.drawPixmap(self.rect(), self.image)
+
+        pen = QPen(Qt.red, 5)  # Points en rouge
         painter.setPen(pen)
 
         if self.latitudes and self.longitudes:
-            min_lat = min(self.latitudes)
-            max_lat = max(self.latitudes)
-            min_lon = min(self.longitudes)
-            max_lon = max(self.longitudes)
-
-            if max_lat == min_lat:
-                max_lat += 0.0001  
-            if max_lon == min_lon:
-                max_lon += 0.0001  
-
             for lat, lon in zip(self.latitudes, self.longitudes):
-                x = (lon - min_lon) / (max_lon - min_lon) * self.width()
-                y = (lat - min_lat) / (max_lat - min_lat) * self.height()
+                # Convertir latitude et longitude en coordonnées X, Y
+                x = (lon - self.min_lon) / (self.max_lon - self.min_lon) * self.width()
+                y = (lat - self.min_lat) / (self.max_lat - self.min_lat) * self.height()
 
+                # Inverser l'axe Y pour correspondre à l'origine en haut à gauche
                 y = self.height() - y
 
+                # Dessiner le point sur la carte
                 painter.drawPoint(int(x), int(y))
+
+
+
 
 class ClientApp(QMainWindow):
     def __init__(self, ip, port):
@@ -144,7 +152,7 @@ class ClientApp(QMainWindow):
             print("Connecté au serveur.")
             self.btn_start.setDisabled(True)
             self.btn_start.setText("Réception en cours") 
-            self.timer.start(1000) #0.01s 
+            self.timer.start(10) #0.01s 
             self.btn_text_timer.start(1000)
         except Exception as e:
             print(f"Erreur de connexion : {e}")
@@ -169,12 +177,11 @@ class ClientApp(QMainWindow):
 
                 if "index" in line:
                     return
-                
+
                 if line == "Fin transmission":
                     self.close_connection()
                     return
 
-                
                 parts = line.strip().split(';')
                 if len(parts) == 20:
                     parts = [p.replace(',', '.') for p in parts]
@@ -184,21 +191,25 @@ class ClientApp(QMainWindow):
                         dataline = Dataline(*float_parts)
                         self.ma_liste_dataline.append(dataline)
 
+                        # Ajout des coordonnées GPS
                         self.map.latitudes.append(dataline.d_lat)
                         self.map.longitudes.append(dataline.d_lon)
 
+                        # Mise à jour des informations affichées
                         self.heure.setText(f"Heure de la capture : {dataline.heure}:{dataline.minute}:{dataline.seconde}")
                         self.coords.setText(f"Coordonnées : {round(dataline.d_lat, 5)}:{round(dataline.d_lon, 5)}")
                         self.vitesse.setText(f"Vitesse : {dataline.vitesse} km/h")
                         self.volt.setText(f"Tension : {dataline.volt} V")
                         self.ampere.setText(f"Courant : {dataline.ampere} A")
 
+                        # Mise à jour de la carte
                         self.map.update()
 
                     except ValueError as e:
                         print(f"Erreur de conversion : {e}")
         except Exception as e:
             print(f"Erreur lors de la réception des données : {e}")
+
 
     def close_connection(self):
         """ Fermer le socket et arrêter le timer sans fermer l'application """
