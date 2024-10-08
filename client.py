@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPainter, QPen
 import argparse
 import time
 from variables import TEMPS_ATTENTE, GENERE_CSV
+import threading
 
 class Dataline:
     def __init__(self, *args):
@@ -178,9 +179,8 @@ class ClientApp(QMainWindow):
                     return
                 
                 if(GENERE_CSV):
-                    #ecriture de la ligne dans le CSV généré côté client
-                    with open(self.nom_fichier, 'a') as file:
-                        file.write(line)
+                    #Écriture de la ligne dans le CSV généré côté client dans un thread séparé afin de ne pas subir de latence et donc de pertes
+                    threading.Thread(target=self.write_to_csv, args=(self.nom_fichier, line)).start()
 
                 
                 parts = line.strip().split(';')
@@ -220,6 +220,10 @@ class ClientApp(QMainWindow):
         self.ampere.setText("Courant : 0A")
         self.btn_start.setText("Réception terminée")
         self.btn_start.setStyleSheet("background-color: green; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
+
+    def write_to_csv(self, filename, line):
+        with open(filename, 'a') as file:
+            file.write(line)
 
 
 if __name__ == '__main__':
