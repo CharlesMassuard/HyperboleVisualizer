@@ -176,7 +176,7 @@ class ClientApp(QMainWindow):
                     self.close_connection()
                     return
                 
-                with open(self.nom_fichier, 'w') as file:
+                with open(self.nom_fichier, 'a') as file:
                     file.write(line)
 
                 
