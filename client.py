@@ -23,35 +23,30 @@ class Canvas(QWidget):
         super().__init__(parent)
         self.latitudes = []
         self.longitudes = []
-        self.image = QPixmap("circuit.png")  # Remplacez par le chemin de votre image
-
-        # Limites géographiques de l'image (à ajuster en fonction de la carte)
-        self.min_lat = 40.7128  # Exemple : latitude minimale
-        self.max_lat = 40.7486  # Exemple : latitude maximale
-        self.min_lon = -74.0060  # Exemple : longitude minimale
-        self.max_lon = -73.9352  # Exemple : longitude maximale
 
     def paintEvent(self, event):
-        """ Redéfinir paintEvent pour dessiner l'image de fond et les points ajustés """
+        """ Redéfinir paintEvent pour dessiner les points """
         painter = QPainter(self)
-
-        # Dessiner l'image de fond (elle sera redimensionnée pour remplir le widget)
-        if not self.image.isNull():
-            painter.drawPixmap(self.rect(), self.image)
-
-        pen = QPen(Qt.red, 5)  # Points en rouge
+        pen = QPen(Qt.black, 3)  
         painter.setPen(pen)
 
         if self.latitudes and self.longitudes:
-            for lat, lon in zip(self.latitudes, self.longitudes):
-                # Convertir latitude et longitude en coordonnées X, Y
-                x = (lon - self.min_lon) / (self.max_lon - self.min_lon) * self.width()
-                y = (lat - self.min_lat) / (self.max_lat - self.min_lat) * self.height()
+            min_lat = min(self.latitudes)
+            max_lat = max(self.latitudes)
+            min_lon = min(self.longitudes)
+            max_lon = max(self.longitudes)
 
-                # Inverser l'axe Y pour correspondre à l'origine en haut à gauche
+            if max_lat == min_lat:
+                max_lat += 0.0001  
+            if max_lon == min_lon:
+                max_lon += 0.0001  
+
+            for lat, lon in zip(self.latitudes, self.longitudes):
+                x = (lon - min_lon) / (max_lon - min_lon) * self.width()
+                y = (lat - min_lat) / (max_lat - min_lat) * self.height()
+
                 y = self.height() - y
 
-                # Dessiner le point sur la carte
                 painter.drawPoint(int(x), int(y))
 
 
@@ -209,6 +204,7 @@ class ClientApp(QMainWindow):
                         print(f"Erreur de conversion : {e}")
         except Exception as e:
             print(f"Erreur lors de la réception des données : {e}")
+
 
 
     def close_connection(self):
