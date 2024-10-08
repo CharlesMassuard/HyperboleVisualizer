@@ -1,0 +1,1 @@
+TEMPS_ATTENTE = 0.01 # Temps d'attente en seconde entre chaque envoi et récéption de données

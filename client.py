@@ -5,6 +5,7 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter, QPen
 import argparse
 import time
+from variables import TEMPS_ATTENTE
 
 class Dataline:
     def __init__(self, *args):
@@ -146,7 +147,7 @@ class ClientApp(QMainWindow):
             print("Connecté au serveur.")
             self.btn_start.setDisabled(True)
             self.btn_start.setText("Réception en cours") 
-            self.timer.start(1000) #0.01s 
+            self.timer.start(int(TEMPS_ATTENTE * 1000))
             self.btn_text_timer.start(1000)
         except Exception as e:
             print(f"Erreur de connexion : {e}")
