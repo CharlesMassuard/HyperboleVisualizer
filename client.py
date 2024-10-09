@@ -24,13 +24,13 @@ class Canvas(QWidget):
         super().__init__(parent)
         self.latitudes = []
         self.longitudes = []
-        self.image = QPixmap("./imgs/Circuit.bmp")  # Remplacez par le chemin de votre image
+        self.image = QPixmap("./imgs/carte_sans_fond.png")  # Remplacez par le chemin de votre image
 
         # Limites géographiques ajustées
-        self.min_lat = 43.765800 + (0.5 * 0.0007)  # Déplacer plus vers le haut
-        self.max_lat = 43.775000 + (0.5 * 0.0007)  # Déplacer plus vers le haut
-        self.min_lon = -0.044500 - (4 * 0.0005)  # Déplacement plus léger à droite en longitude
-        self.max_lon = -0.034000 - (4 * 0.0005)  # Déplacement plus léger à droite en longitude
+        self.min_lat = 43.766097  #Coin bas droit de l'image du circuit
+        self.max_lat = 43.773858 #Coin haut gauche de l'image du circuit
+        self.min_lon = -0.046070 #Coin  haut gauche de l'image du circuit
+        self.max_lon = -0.034833  #Coin bas droit de l'image du circuit
 
     def rotate_point(self, lat, lon, center_lat, center_lon, angle_rad):
         """ Fonction pour tourner un point (lat, lon) autour du centre (center_lat, center_lon) d'un angle angle_rad """
@@ -52,7 +52,7 @@ class Canvas(QWidget):
         if not self.image.isNull():
             painter.drawPixmap(self.rect(), self.image)
 
-        pen = QPen(Qt.black, 3)
+        pen = QPen(Qt.red, 3)
         painter.setPen(pen)
 
         # Centre de rotation (ici on choisit la moyenne des limites lat/lon)
