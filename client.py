@@ -52,7 +52,7 @@ class Canvas(QWidget):
         if not self.image.isNull():
             painter.drawPixmap(self.rect(), self.image)
 
-        pen = QPen(Qt.red, 5)
+        pen = QPen(Qt.black, 3)
         painter.setPen(pen)
 
         # Centre de rotation (ici on choisit la moyenne des limites lat/lon)
