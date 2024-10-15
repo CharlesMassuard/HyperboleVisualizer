@@ -2,11 +2,12 @@ import sys
 import socket
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QFileDialog, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
 from PyQt5.QtCore import QTimer, Qt
-from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtGui import QPainter, QPen, QPixmap
 import argparse
 import time
 from variables import TEMPS_ATTENTE, GENERE_CSV
 import threading
+import math
 
 class Dataline:
     def __init__(self, *args):
@@ -25,31 +26,60 @@ class Canvas(QWidget):
         super().__init__(parent)
         self.latitudes = []
         self.longitudes = []
+        self.image = QPixmap("./imgs/Circuit.bmp")  # Remplacez par le chemin de votre image
+
+        # Limites géographiques ajustées
+        self.min_lat = 43.765800 + (0.5 * 0.0007)  # Déplacer plus vers le haut
+        self.max_lat = 43.775000 + (0.5 * 0.0007)  # Déplacer plus vers le haut
+        self.min_lon = -0.044500 - (4 * 0.0005)  # Déplacement plus léger à droite en longitude
+        self.max_lon = -0.034000 - (4 * 0.0005)  # Déplacement plus léger à droite en longitude
+
+    def rotate_point(self, lat, lon, center_lat, center_lon, angle_rad):
+        """ Fonction pour tourner un point (lat, lon) autour du centre (center_lat, center_lon) d'un angle angle_rad """
+        # Convertir les latitudes et longitudes en coordonnées cartésiennes relatives
+        lat_rel = lat - center_lat
+        lon_rel = lon - center_lon
+
+        # Appliquer la rotation
+        new_lat = center_lat + (lat_rel * math.cos(angle_rad)) - (lon_rel * math.sin(angle_rad))
+        new_lon = center_lon + (lat_rel * math.sin(angle_rad)) + (lon_rel * math.cos(angle_rad))
+
+        return new_lat, new_lon
 
     def paintEvent(self, event):
-        """ Redéfinir paintEvent pour dessiner les points """
+        """ Redéfinir paintEvent pour dessiner l'image de fond et les points ajustés avec rotation """
         painter = QPainter(self)
-        pen = QPen(Qt.black, 3)  
+
+        # Dessiner l'image de fond
+        if not self.image.isNull():
+            painter.drawPixmap(self.rect(), self.image)
+
+        pen = QPen(Qt.black, 3)
         painter.setPen(pen)
 
+        # Centre de rotation (ici on choisit la moyenne des limites lat/lon)
+        center_lat = (self.max_lat + self.min_lat) / 2
+        center_lon = (self.max_lon + self.min_lon) / 2
+
+        # Angle de rotation en radians (par exemple 5 degrés dans le sens des aiguilles d'une montre)
+        angle_deg = 15  # vous pouvez ajuster cet angle
+        angle_rad = math.radians(angle_deg)
+
         if self.latitudes and self.longitudes:
-            min_lat = min(self.latitudes)
-            max_lat = max(self.latitudes)
-            min_lon = min(self.longitudes)
-            max_lon = max(self.longitudes)
-
-            if max_lat == min_lat:
-                max_lat += 0.0001  
-            if max_lon == min_lon:
-                max_lon += 0.0001  
-
             for lat, lon in zip(self.latitudes, self.longitudes):
-                x = (lon - min_lon) / (max_lon - min_lon) * self.width()
-                y = (lat - min_lat) / (max_lat - min_lat) * self.height()
+                # Appliquer la rotation à chaque point autour du centre
+                rotated_lat, rotated_lon = self.rotate_point(lat, lon, center_lat, center_lon, angle_rad)
 
+                # Convertir les coordonnées GPS en coordonnées x, y
+                x = (rotated_lon - self.min_lon) / (self.max_lon - self.min_lon) * self.width()
+                y = (rotated_lat - self.min_lat) / (self.max_lat - self.min_lat) * self.height()
+
+                # Inverser l'axe Y pour correspondre à l'origine en haut à gauche
                 y = self.height() - y
 
+                # Dessiner le point sur la carte
                 painter.drawPoint(int(x), int(y))
+
 
 class ClientApp(QMainWindow):
     def __init__(self, ip, port):
@@ -68,7 +98,7 @@ class ClientApp(QMainWindow):
         screen_height = screen.height()
 
         # Définir la taille minimale de la fenêtre en fonction de la taille de l'écran
-        self.setMinimumSize(int(screen_width*0.8), int(screen_height*0.8))
+        self.setMinimumSize(int(screen_width * 0.8), int(screen_height * 0.8))
         self.move(
             (screen_width - self.width()) // 2,
             (screen_height - self.height()) // 2
@@ -143,8 +173,8 @@ class ClientApp(QMainWindow):
 
         self.nom_fichier = f"output_{time.strftime('%Y%m%d_%H%M%S')}.csv"
 
-        #Lancement automatique reception (+ simple pour debug)
-        # self.start_receiving()
+        # Lancement automatique reception (+ simple pour debug)
+        self.start_receiving()
 
     def start_receiving(self):
         try:
@@ -177,7 +207,7 @@ class ClientApp(QMainWindow):
 
                 if "index" in line:
                     return
-                
+
                 if line == "Fin transmission":
                     self.close_connection()
                     return
@@ -196,9 +226,11 @@ class ClientApp(QMainWindow):
                         dataline = Dataline(*float_parts)
                         self.ma_liste_dataline.append(dataline)
 
+                        # Ajout des coordonnées GPS
                         self.map.latitudes.append(dataline.d_lat)
                         self.map.longitudes.append(dataline.d_lon)
 
+                        # Mise à jour des informations affichées
                         self.heure.setText(f"Heure de la capture : {dataline.heure}:{dataline.minute}:{dataline.seconde}")
                         self.coords.setText(f"Coordonnées : {round(dataline.d_lat, 5)}:{round(dataline.d_lon, 5)}")
                         self.vitesse.setText(f"Vitesse : {dataline.vitesse} km/h")
@@ -206,6 +238,7 @@ class ClientApp(QMainWindow):
                         self.ampere.setText(f"Courant : {dataline.ampere} A")
                         self.watt.setText(f"Puissance : {round(dataline.volt * dataline.ampere, 2)} W")
 
+                        # Mise à jour de la carte
                         self.map.update()
 
                     except ValueError as e:
