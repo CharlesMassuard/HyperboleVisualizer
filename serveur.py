@@ -1,6 +1,7 @@
 import socket
 import time
 import argparse
+from variables import TEMPS_ATTENTE, FICHIER_A_ENVOYER
 
 def send_csv_to_client(filename, host, port):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,13 +18,13 @@ def send_csv_to_client(filename, host, port):
             for line in file:
                 conn.sendall(line.encode())  # Envoi de la ligne
                 print(f"Envoyé: {line.strip()}")
-                time.sleep(0.01)  # Attendre 0.01 seconde avant d'envoyer la prochaine ligne
+                time.sleep(TEMPS_ATTENTE)  # Attendre avant d'envoyer la prochaine ligne
 
         conn.sendall("Fin transmission".encode())
         print("Fichier envoyé avec succès.")
     except Exception as e:
         print(f"Erreur lors de l'envoi des données : {e}")
-    finally:
+    finally: 
         try:
             conn.shutdown(socket.SHUT_RDWR)
             conn.close()
@@ -32,7 +33,7 @@ def send_csv_to_client(filename, host, port):
         server_socket.close()
 
 if __name__ == "__main__":
-    csv_file = 'output2.csv'
+    csv_file =  FICHIER_A_ENVOYER
     parser = argparse.ArgumentParser(description="IP Serveur")
     parser.add_argument("ip_serveur", type=str, nargs='?', default='127.0.0.1', help="Adresse IP du serveur")
     parser.add_argument("port", type=int, nargs='?', default=12345, help="Port du serveur")

@@ -5,6 +5,8 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPainter, QPen, QPixmap
 import argparse
 import time
+from variables import TEMPS_ATTENTE, GENERE_CSV
+import threading
 import math
 
 class Dataline:
@@ -132,12 +134,16 @@ class ClientApp(QMainWindow):
         self.ampere = QLabel("Courant : 0A")
         self.ampere.setStyleSheet("font-size: 18px;")
 
+        self.watt = QLabel("Puissance : 0W")
+        self.watt.setStyleSheet("font-size: 18px;")
+
         info_layout = QVBoxLayout()
         info_layout.addWidget(self.heure)
         info_layout.addWidget(self.coords)
         info_layout.addWidget(self.vitesse)
         info_layout.addWidget(self.volt)
         info_layout.addWidget(self.ampere)
+        info_layout.addWidget(self.watt)
 
         # Layout principal
         center_layout = QHBoxLayout()
@@ -165,6 +171,8 @@ class ClientApp(QMainWindow):
         self.btn_text_timer = QTimer()
         self.btn_text_timer.timeout.connect(self.change_button_text)
 
+        self.nom_fichier = f"output_{time.strftime('%Y%m%d_%H%M%S')}.csv"
+
         # Lancement automatique reception (+ simple pour debug)
         self.start_receiving()
 
@@ -174,7 +182,7 @@ class ClientApp(QMainWindow):
             print("Connecté au serveur.")
             self.btn_start.setDisabled(True)
             self.btn_start.setText("Réception en cours") 
-            self.timer.start(10)  # 0.01s 
+            self.timer.start(int(TEMPS_ATTENTE * 1000))
             self.btn_text_timer.start(1000)
         except Exception as e:
             print(f"Erreur de connexion : {e}")
@@ -203,7 +211,12 @@ class ClientApp(QMainWindow):
                 if line == "Fin transmission":
                     self.close_connection()
                     return
+                
+                if(GENERE_CSV):
+                    #Écriture de la ligne dans le CSV généré côté client dans un thread séparé afin de ne pas subir de latence et donc de pertes
+                    threading.Thread(target=self.write_to_csv, args=(self.nom_fichier, line)).start()
 
+                
                 parts = line.strip().split(';')
                 if len(parts) == 20:
                     parts = [p.replace(',', '.') for p in parts]
@@ -223,6 +236,7 @@ class ClientApp(QMainWindow):
                         self.vitesse.setText(f"Vitesse : {dataline.vitesse} km/h")
                         self.volt.setText(f"Tension : {dataline.volt} V")
                         self.ampere.setText(f"Courant : {dataline.ampere} A")
+                        self.watt.setText(f"Puissance : {round(dataline.volt * dataline.ampere, 2)} W")
 
                         # Mise à jour de la carte
                         self.map.update()
@@ -244,6 +258,10 @@ class ClientApp(QMainWindow):
         self.ampere.setText("Courant : 0A")
         self.btn_start.setText("Réception terminée")
         self.btn_start.setStyleSheet("background-color: green; color: white; font-size: 16px; padding: 10px; border-radius: 5px;")
+
+    def write_to_csv(self, filename, line):
+        with open(filename, 'a') as file:
+            file.write(line)
 
 
 if __name__ == '__main__':
