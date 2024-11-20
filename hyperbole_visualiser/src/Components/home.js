@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/home.css';
-import db from '../FireBase/firebase';
+import { collection, onSnapshot } from 'firebase/firestore'; // Import des fonctions Firestore
+import db from '../FireBase/firebase'; // Import de l'instance Firestore
 
 function Home() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await db.collection('points').get(); // Remplacez par le nom correct
+    // Écoute en temps réel des modifications dans la collection 'points'
+    const unsubscribe = onSnapshot(
+      collection(db, 'points'), 
+      (querySnapshot) => {
         const fetchedData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+        console.log("Updated Data:", fetchedData); // Vérifiez les données reçues en temps réel
         setData(fetchedData);
-      } catch (error) {
-        console.error('Error fetching data: ', error);
+      },
+      (error) => {
+        console.error("Error fetching data: ", error);
       }
-    };
+    );
 
-    fetchData();
+    // Nettoyage de l'écouteur lors du démontage du composant
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -30,7 +35,7 @@ function Home() {
         {data.map((item) => (
           <li key={item.id}>
             {/* Affichez vos données ici */}
-            {item.name} - {item.age}
+            {item.lat} - {item.long}
           </li>
         ))}
       </ul>
