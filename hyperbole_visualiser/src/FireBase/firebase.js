@@ -1,11 +1,12 @@
 // Import des modules Firebase
 import { initializeApp } from 'firebase/app'; // Initialise l'application Firebase
-import { getFirestore } from 'firebase/firestore'; // Import Firestore
+import { getDatabase } from 'firebase/database'; // Import Realtime Database
 
 // Configuration Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAi4ZoC65ZI7NH2H0VQ1Lvp-zHeLVMoMRQ",
   authDomain: "hyperbolevisualizer.firebaseapp.com",
+  databaseURL: "https://hyperbolevisualizer-default-rtdb.europe-west1.firebasedatabase.app/",
   projectId: "hyperbolevisualizer",
   storageBucket: "hyperbolevisualizer.firebasestorage.app",
   messagingSenderId: "206996044032",
@@ -16,7 +17,7 @@ const firebaseConfig = {
 // Initialisation Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialisation Firestore
-const db = getFirestore(app);
+// Initialisation Realtime Database
+const db = getDatabase(app);
 
 export default db;
