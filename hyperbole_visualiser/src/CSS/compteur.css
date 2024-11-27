@@ -1,0 +1,9 @@
+.compteur-box {
+    width: 100%;
+    height: 300px; /* Définissez une hauteur explicite */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  

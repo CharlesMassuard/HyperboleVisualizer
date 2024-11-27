@@ -3,12 +3,12 @@ import '../CSS/donnees.css';
 import { ref, onValue } from 'firebase/database'; // Import des fonctions Realtime Database
 import db from '../FireBase/firebase'; // Import de l'instance Realtime Database
 
-function Home() {
+function Donnees() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     // Référence à la collection 'points' dans la Realtime Database
-    const pointsRef = ref(db, 'points');
+    const pointsRef = ref(db, '/');
 
     // Écoute en temps réel des modifications dans 'points'
     const unsubscribe = onValue(
@@ -39,7 +39,7 @@ function Home() {
         {data.map((item) => (
           <li key={item.id}>
             {/* Affichez vos données ici */}
-            {item.lat} - {item.long}
+            {item.D_Lat} - {item.D_Lon} - {item.V}
           </li>
         ))}
       </ul>
@@ -47,4 +47,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Donnees;
