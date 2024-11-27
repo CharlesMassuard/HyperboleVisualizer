@@ -1,0 +1,27 @@
+.donnees-box {
+    width: 600px; /* Largeur de la boîte */
+    height: 200px; /* Hauteur maximale de la boîte */
+    border: 1px solid #ccc; /* Bordure pour mieux visualiser la boîte */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 10px; /* Espacement intérieur */
+    overflow-y: auto; /* Barre de défilement verticale si le contenu dépasse */
+    background-color: #f9f9f9; /* Couleur d'arrière-plan */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour un effet visuel */
+  }
+  
+  .donnees-list {
+    list-style: none; /* Suppression des puces */
+    padding: 0; /* Suppression du padding par défaut */
+    margin: 0; /* Suppression des marges par défaut */
+  }
+  
+  .donnees-list li {
+    padding: 8px;
+    margin-bottom: 4px;
+    background: #ffffff; /* Couleur de fond des éléments */
+    border: 1px solid #ddd; /* Bordure des éléments */
+    border-radius: 4px; /* Coins arrondis */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Ombre légère pour chaque élément */
+    font-size: 14px; /* Taille de police */
+  }
+  
