@@ -1,20 +1,9 @@
 .thermometre-container {
-    position: absolute;
-    cursor: pointer;
-  }
-  
-  .thermometre-box {
-    width: 80px;
-    text-align: center;
-    background: #fff;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .temperature {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
+  position: absolute;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column; /* Aligner verticalement le thermomètre et le texte */
+  align-items: center; /* Centrer horizontalement */
+  justify-content: center; /* Centrer verticalement */
+  text-align: center; /* Centrer le texte */
+}

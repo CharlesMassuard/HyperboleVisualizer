@@ -119,7 +119,7 @@ function Thermometre() {
 
       {lastPoint && (
         <p className="temperature">
-          Température: {lastPoint.T}°C
+          {lastPoint.T}°C
         </p>
       )}
     </div>
