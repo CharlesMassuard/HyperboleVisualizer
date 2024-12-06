@@ -8,7 +8,7 @@ function Donnees() {
 
   useEffect(() => {
     // Référence à la collection 'points' dans la Realtime Database
-    const pointsRef = ref(db, '/');
+    const pointsRef = ref(db, '/data');
 
     // Écoute en temps réel des modifications dans 'points'
     const unsubscribe = onValue(
@@ -39,7 +39,7 @@ function Donnees() {
         {data.map((item) => (
           <li key={item.id}>
             {/* Affichez vos données ici */}
-            {item.D_Lat} - {item.D_Lon} - {item.V}
+            {item.lat} - {item.long} - {item.V}
           </li>
         ))}
       </ul>

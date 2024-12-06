@@ -8,7 +8,7 @@ function Compteur() {
   const [angle, setAngle] = useState(0); // Nouvel état pour l'angle de l'aiguille
 
   useEffect(() => {
-    const pointsRef = ref(db, '/');
+    const pointsRef = ref(db, '/data');
     const unsubscribe = onValue(
       pointsRef,
       (snapshot) => {
