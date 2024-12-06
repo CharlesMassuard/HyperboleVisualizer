@@ -1,0 +1,90 @@
+/* Styles généraux */
+.header {
+  position: relative;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header__title {
+  font-size: 24px;
+}
+
+/* Burger icon */
+.header__burger {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  /* gap: 4px; */
+}
+
+.header__burger-line {
+  width: 30px;
+  height: 4px;
+  background-color: #333;
+}
+
+/* Styles pour le panneau latéral (burger panel) */
+.header__nav {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Initialement hors de l'écran */
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  transition: left 0.3s ease;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  
+}
+
+.header__nav--open {
+  left: 0; /* Le panneau se glisse à gauche */
+}
+
+.header__menu {
+  list-style: none;
+  padding: 0;
+  
+}
+
+.header__menu-item {
+  margin: 20px 0;
+  
+}
+
+.header__menu-link {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header__burger {
+    display: flex;
+    background-color: #333;
+    color: #333;
+  }
+
+  .header__nav {
+    display: block;
+    
+  }
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+    background-color: #333;
+}

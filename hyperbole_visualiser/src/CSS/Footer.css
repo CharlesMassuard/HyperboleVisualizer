@@ -1,0 +1,111 @@
+html, body {
+    height: 100%; /* Assurez-vous que le corps et le html occupent toute la hauteur de la fenêtre */
+    margin: 0;
+  }
+  
+  body {
+    position: relative;
+    padding-bottom: 60px; /* Ajoute de l'espace pour le footer */
+  }
+  
+  .footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    position: absolute;
+    bottom: 0; /* Place le footer tout en bas de la page */
+    width: 100%;
+  }
+  
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer__burger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .burger-line {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px 0;
+  }
+  
+  .footer__nav {
+    display: flex;
+  }
+  
+  .footer__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+  
+  .footer__menu-item {
+    margin: 0 15px;
+  }
+  
+  .footer__menu-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .footer__menu-link:hover {
+    text-decoration: underline;
+  }
+  
+  .footer__social {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .footer__social-link {
+    color: #fff;
+    margin-left: 15px;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .footer__social-link:hover {
+    color: #ddd;
+  }
+  
+  @media (max-width: 768px) {
+    .footer__burger {
+      display: block;
+    }
+  
+    .footer__nav {
+      display: none;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background-color: #333;
+      text-align: center;
+    }
+  
+    .footer__nav--open {
+      display: block;
+    }
+  
+    .footer__menu {
+      flex-direction: column;
+    }
+  
+    .footer__social {
+      justify-content: center;
+      margin-top: 20px;
+    }
+  }
+  
