@@ -4,11 +4,13 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 import Donnees from './Components/donnees';
+import Compteur from './Components/compteur';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Donnees />
+    <Compteur />
   </React.StrictMode>
 );
 

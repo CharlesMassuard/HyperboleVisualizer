@@ -1,23 +1,23 @@
-// Import des modules Firebase
-import { initializeApp } from 'firebase/app'; // Initialise l'application Firebase
+import { initializeApp } from "firebase/app";
 import { getDatabase } from 'firebase/database'; // Import Realtime Database
 
-// Configuration Firebase
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAi4ZoC65ZI7NH2H0VQ1Lvp-zHeLVMoMRQ",
-  authDomain: "hyperbolevisualizer.firebaseapp.com",
-  databaseURL: "https://hyperbolevisualizer-default-rtdb.europe-west1.firebasedatabase.app/",
-  projectId: "hyperbolevisualizer",
-  storageBucket: "hyperbolevisualizer.firebasestorage.app",
-  messagingSenderId: "206996044032",
-  appId: "1:206996044032:web:f817efd6da76b64b909be5",
-  measurementId: "G-CK0KZ4894Y"
+  apiKey: "AIzaSyC1ttRGoeXvo29Zu0H-9OZy-Km3BpTvJ8Y",
+  authDomain: "test-c15c4.firebaseapp.com",
+  databaseURL: "https://test-c15c4-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "test-c15c4",
+  storageBucket: "test-c15c4.firebasestorage.app",
+  messagingSenderId: "221712750387",
+  appId: "1:221712750387:web:225a551c67785279101046",
+  measurementId: "G-FWK3E5RXZ4"
 };
 
-// Initialisation Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialisation Realtime Database
 const db = getDatabase(app);
-
 export default db;
