@@ -1,27 +1,36 @@
+/* Style pour le composant Donnees */
+.donnees-container {
+  position: absolute;
+  top: 200px; /* Placer en dessous du compteur */
+  left: 20px; /* Ajustez la position horizontale selon vos besoins */
+  width: 30vw; /* Largeur de la boîte */
+  height: 200px; /* Hauteur maximale de la boîte */
+  z-index: 1; /* Assurez que le compteur est devant */
+}
+
 .donnees-box {
-    width: 600px; /* Largeur de la boîte */
-    height: 200px; /* Hauteur maximale de la boîte */
-    border: 1px solid #ccc; /* Bordure pour mieux visualiser la boîte */
-    border-radius: 8px; /* Coins arrondis */
-    padding: 10px; /* Espacement intérieur */
-    overflow-y: auto; /* Barre de défilement verticale si le contenu dépasse */
-    background-color: #f9f9f9; /* Couleur d'arrière-plan */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour un effet visuel */
-  }
-  
-  .donnees-list {
-    list-style: none; /* Suppression des puces */
-    padding: 0; /* Suppression du padding par défaut */
-    margin: 0; /* Suppression des marges par défaut */
-  }
-  
-  .donnees-list li {
-    padding: 8px;
-    margin-bottom: 4px;
-    background: #ffffff; /* Couleur de fond des éléments */
-    border: 1px solid #ddd; /* Bordure des éléments */
-    border-radius: 4px; /* Coins arrondis */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Ombre légère pour chaque élément */
-    font-size: 14px; /* Taille de police */
-  }
-  
+  width: 100%; /* Remplit la largeur du conteneur */
+  height: 100%; /* Remplit la hauteur du conteneur */
+  border: 1px solid #ccc; /* Bordure */
+  border-radius: 8px; /* Coins arrondis */
+  padding: 10px; /* Espacement interne */
+  overflow-y: auto; /* Défilement vertical si nécessaire */
+  background-color: #f9f9f9; /* Couleur de fond */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre */
+}
+
+.donnees-list {
+  list-style: none; /* Suppression des puces */
+  padding: 0;
+  margin: 0;
+}
+
+.donnees-list li {
+  padding: 8px;
+  margin-bottom: 4px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+}

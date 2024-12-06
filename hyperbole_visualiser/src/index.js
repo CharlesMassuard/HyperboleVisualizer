@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 import Donnees from './Components/donnees';
 import Compteur from './Components/compteur';
+import Header from './Components/header';
+
+const App = () => {
+  const [showCompteur, setShowCompteur] = useState(true);
+  const [showDonnees, setShowDonnees] = useState(true);
+
+  const toggleCompteur = () => {
+    setShowCompteur(!showCompteur);  // Basculer l'affichage du compteur
+  };
+
+  const toggleDonnees = () => {
+    setShowDonnees(!showDonnees);  // Basculer l'affichage des données
+  };
+
+  return (
+    <React.StrictMode>
+      <Header toggleCompteur={toggleCompteur} toggleDonnees={toggleDonnees} />
+      {showDonnees && <Donnees />}
+      {showCompteur && <Compteur />}
+    </React.StrictMode>
+  );
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Donnees />
-    <Compteur />
-  </React.StrictMode>
-);
+root.render(<App />);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Mesurer les performances (facultatif)
 reportWebVitals();
