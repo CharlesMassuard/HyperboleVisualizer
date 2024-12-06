@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../CSS/header.css';
+import SettingsImage from '../Settings.png';
+
 
 function Header({ toggleCompteur, toggleDonnees }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +28,8 @@ function Header({ toggleCompteur, toggleDonnees }) {
   return (
     <div className="header">
       <h1>Hyperbole Visualiser</h1>
-      <button onClick={toggleModal}>Paramètres</button>
+      <button onClick={toggleModal}><img src={SettingsImage} alt="settings" /></button>
+      
 
       {/* Fenêtre modale des paramètres */}
       {isModalOpen && (

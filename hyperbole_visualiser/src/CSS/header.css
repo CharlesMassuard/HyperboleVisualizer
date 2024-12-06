@@ -14,19 +14,20 @@
   }
   
   button {
-    padding: 10px 20px;
-    font-size: 1rem;
     cursor: pointer;
-    background-color: #3498db; /* Couleur de fond du bouton */
-    color: white; /* Couleur du texte du bouton */
     border: none; /* Supprimer la bordure du bouton */
     border-radius: 4px; /* Coins arrondis pour le bouton */
-    transition: background-color 0.3s; /* Transition pour le survol */
+  }
+
+  .modal button{
+    padding: 10px 20px;
+
+  }
+
+  button img{
+    width: 50px;
   }
   
-  button:hover {
-    background-color: #2980b9; /* Changer la couleur du bouton au survol */
-  }
   
   .modal {
     position: fixed;
