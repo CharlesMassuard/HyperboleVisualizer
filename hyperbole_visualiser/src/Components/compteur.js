@@ -6,7 +6,7 @@ import db from '../FireBase/firebase'; // Instance Firebase
 function Compteur() {
   const [lastPoint, setLastPoint] = useState(null);
   const [angle, setAngle] = useState(0);
-  const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [position, setPosition] = useState({ x: '80%', y: '70%' });
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
