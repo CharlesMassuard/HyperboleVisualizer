@@ -3,10 +3,11 @@ import '../CSS/header.css';
 import SettingsImage from '../Settings.png';
 
 
-function Header({ toggleCompteur, toggleDonnees }) {
+function Header({ toggleCompteur, toggleDonnees , toggleTemperature}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompteurVisible, setIsCompteurVisible] = useState(true);  // initialiser à true
   const [isDonneesVisible, setIsDonneesVisible] = useState(true);  // initialiser à true
+  const [isTemperatureVisible, setIsTemperatureVisible] = useState(true);  // initialiser à true
 
   // Ouvre/ferme la fenêtre des paramètres
   const toggleModal = () => {
@@ -24,6 +25,11 @@ function Header({ toggleCompteur, toggleDonnees }) {
     setIsDonneesVisible(e.target.checked);  // met à jour la visibilité des données
     toggleDonnees(e.target.checked);  // appelle la fonction parent pour gérer l'état des données
   };
+
+  const handleTemperatureChange = (e) => {
+    setIsTemperatureVisible(e.target.checked);  // met à jour la visibilité de la température
+    toggleTemperature(e.target.checked);  // appelle la fonction parent pour gérer l'état de la température
+  }
 
   return (
     <div className="header">
@@ -50,6 +56,14 @@ function Header({ toggleCompteur, toggleDonnees }) {
                 checked={isDonneesVisible}  // coche la case si données visibles
                 onChange={handleDonneesChange}
               /> Afficher Données
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                checked={isTemperatureVisible}  // coche la case si température visible
+                onChange={handleTemperatureChange}
+              /> Afficher Température
             </label>
             <br />
             <button onClick={toggleModal}>Fermer</button>
