@@ -1,28 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { ref, onValue } from 'firebase/database'; // Firebase Realtime Database
+import db from './FireBase/firebase'; // Instance Firebase
 
 import Donnees from './Components/donnees';
 import Compteur from './Components/compteur';
 import Header from './Components/header';
 import Thermometre from './Components/temperature';
+import CarMap from './Components/map';
 
 const App = () => {
   const [showCompteur, setShowCompteur] = useState(true);
   const [showDonnees, setShowDonnees] = useState(true);
   const [showTemperature, setShowTemperature] = useState(true);
+  const [points, setPoints] = useState([]);
+
+  useEffect(() => {
+    const pointsRef = ref(db, '/data');
+    const unsubscribe = onValue(
+      pointsRef,
+      (snapshot) => {
+        const fetchedData = [];
+        snapshot.forEach((childSnapshot) => {
+          fetchedData.push({
+            id: childSnapshot.key,
+            ...childSnapshot.val(),
+          });
+        });
+  
+        if (fetchedData.length > 0) {
+          setPoints(fetchedData); 
+        }
+      },
+      (error) => {
+        console.error('Error fetching data: ', error);
+      }
+    );
+  
+    return () => unsubscribe();
+  }, []);
+    
 
   const toggleCompteur = () => {
-    setShowCompteur(!showCompteur);  // Basculer l'affichage du compteur
+    setShowCompteur(!showCompteur);
   };
 
   const toggleDonnees = () => {
-    setShowDonnees(!showDonnees);  // Basculer l'affichage des données
+    setShowDonnees(!showDonnees);
   };
 
   const toggleTemperature = () => {
-    setShowTemperature(!showTemperature);  // Basculer l'affichage de la température
+    setShowTemperature(!showTemperature);
   };
 
   return (
@@ -31,6 +61,7 @@ const App = () => {
       {showDonnees && <Donnees />}
       {showCompteur && <Compteur />}
       {showTemperature && <Thermometre />}
+      <CarMap points={points} />
     </React.StrictMode>
   );
 };
@@ -38,5 +69,4 @@ const App = () => {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
 
-// Mesurer les performances (facultatif)
 reportWebVitals();
