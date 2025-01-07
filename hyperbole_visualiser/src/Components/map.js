@@ -23,35 +23,43 @@ const CarMap = ({ points }) => {
   }, [pointsWithLng]);
 
   const currentPoint = pointsWithLng[currentIndex];
+
   const path2 = pointsWithLng.slice(0, currentIndex + 1);
 
-  const path = [
-    { lat: 43.769146, lng: -0.039225 },
-  ];
-  
+  // Convertir en JSON
+  const path2JSON = JSON.stringify({ path2 }, null, 2);
+
+  console.log(path2JSON);
+  console.log(path2);
 
   return (
-    <MapContainer
-      center={path[0]} // Centrage initial sur le premier point
-      zoom={18} // Zoom adapté pour une vue rapprochée
-      style={{ height: "500px", width: "100%" }}
-    >
-      {/* Couche de base OpenStreetMap */}
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
-      />
+    <div>
+      {path2.length > 0 ? ( // Vérifie que path2 n'est pas vide
+        <MapContainer
+          center={path2[0]} // Centrage initial sur le premier point
+          zoom={18}
+          style={{ height: "500px", width: "100%" }}
+        >
+          {/* Couche de base OpenStreetMap */}
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+          />
 
-      {/* Ligne entre les points */}
-      <Polyline positions={path} color="blue" />
+          {/* Ligne entre les points */}
+          <Polyline positions={path2} color="blue" />
 
-      {/* Marqueur pour la position actuelle */}
-      {currentPoint && (
-        <Marker position={currentPoint}>
-          <Popup>Position actuelle de la voiture</Popup>
-        </Marker>
+          {/* Marqueur pour la position actuelle */}
+          {currentPoint && (
+            <Marker position={currentPoint}>
+              <Popup>Position actuelle de la voiture</Popup>
+            </Marker>
+          )}
+        </MapContainer>
+      ) : (
+        <p>Chargement des données...</p> // Affiche un message pendant le chargement
       )}
-    </MapContainer>
+    </div>
   );
 };
 
