@@ -18,7 +18,7 @@ const App = () => {
   const [points, setPoints] = useState([]);
 
   useEffect(() => {
-    const pointsRef = ref(db, '/data');
+    const pointsRef = ref(db, '/gps');
     const unsubscribe = onValue(
       pointsRef,
       (snapshot) => {
@@ -57,14 +57,18 @@ const App = () => {
 
   return (
     <React.StrictMode>
-      <Header toggleCompteur={toggleCompteur} toggleDonnees={toggleDonnees} toggleTemperature={toggleTemperature}/>
+      <Header toggleCompteur={toggleCompteur} toggleDonnees={toggleDonnees} toggleTemperature={toggleTemperature} />
+      
       {showDonnees && <Donnees />}
       {showCompteur && <Compteur />}
       {showTemperature && <Thermometre />}
-      <CarMap points={points} />
+      
+      <div style={{ height: "50vh", width: "50%" }}>
+        <CarMap points={points} />
+      </div>
     </React.StrictMode>
   );
-};
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);

@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
 const CarMap = ({ points }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentTime, setCurrentTime] = useState(null);
+  const [iconSize, setIconSize] = useState([32, 32]); 
 
-  // Remplacer "long" par "lng" dans les points
+  console.log(points[0]);
+
   const pointsWithLng = points.map((point) => ({
-    lat: point.lat,
-    lng: point.long, // Remplacer "long" par "lng"
+    lat: point.latitude,
+    lng: point.longitude,
+    time: point.time,
   }));
 
-  // Fonction pour animer le déplacement de la voiture
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         prevIndex < pointsWithLng.length - 1 ? prevIndex + 1 : prevIndex
       );
-    }, 1000); // Mise à jour toutes les secondes
+      setCurrentTime(pointsWithLng[currentIndex].time);
+      if (currentIndex < pointsWithLng.length - 1) {
+        setIconSize([40, 40]);
+      } else {
+        setIconSize([32, 32]);
+      }
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [pointsWithLng]);
+  }, [pointsWithLng, currentIndex]);
 
   const currentPoint = pointsWithLng[currentIndex];
 
@@ -31,6 +41,14 @@ const CarMap = ({ points }) => {
 
   console.log(path2JSON);
   console.log(path2);
+
+  // Définir l'icône de la voiture avec une taille dynamique
+  const carIcon = new L.Icon({
+    iconUrl: "https://img.icons8.com/ios/452/car.png", // Lien vers une icône de voiture (utilise une icône ou une image de ton choix)
+    iconSize: iconSize, // Taille dynamique de l'icône
+    iconAnchor: [16, 32], // Point d'ancrage de l'icône
+    popupAnchor: [0, -32], // Position du popup par rapport à l'icône
+  });
 
   return (
     <div>
@@ -49,10 +67,17 @@ const CarMap = ({ points }) => {
           {/* Ligne entre les points */}
           <Polyline positions={path2} color="blue" />
 
-          {/* Marqueur pour la position actuelle */}
+          {/* Marqueur pour la position actuelle avec l'icône personnalisée */}
           {currentPoint && (
-            <Marker position={currentPoint}>
-              <Popup>Position actuelle de la voiture</Popup>
+            <Marker position={currentPoint} icon={carIcon}>
+              <Popup>
+                <div>
+                  <h4>Position actuelle de la voiture</h4>
+                  <p><strong>Latitude:</strong> {currentPoint.lat}</p>
+                  <p><strong>Longitude:</strong> {currentPoint.lng}</p>
+                  <p><strong>Heure:</strong> {currentTime}</p>
+                </div>
+              </Popup>
             </Marker>
           )}
         </MapContainer>
