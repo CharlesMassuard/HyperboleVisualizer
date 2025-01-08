@@ -1,0 +1,9 @@
+.thermometre-container {
+  position: absolute;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column; /* Aligner verticalement le thermomètre et le texte */
+  align-items: center; /* Centrer horizontalement */
+  justify-content: center; /* Centrer verticalement */
+  text-align: center; /* Centrer le texte */
+}
