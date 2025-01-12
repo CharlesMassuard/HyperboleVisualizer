@@ -8,9 +8,11 @@ function Compteur() {
   const [angle, setAngle] = useState(0);
   const [position, setPosition] = useState({ x: '80%', y: '70%' });
   const [isDragging, setIsDragging] = useState(false);
+  const collectionName = sessionStorage.getItem('collectionName') || '/';
+
 
   useEffect(() => {
-    const pointsRef = ref(db, '/data');
+    const pointsRef = ref(db, collectionName);
     const unsubscribe = onValue(
       pointsRef,
       (snapshot) => {
@@ -32,7 +34,7 @@ function Compteur() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [collectionName]);
 
   useEffect(() => {
     const validVitesse = lastPoint?.V ? Math.max(0, Math.min(lastPoint.V, 100)) : 0;
