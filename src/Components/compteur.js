@@ -8,10 +8,37 @@ function Compteur() {
   const [angle, setAngle] = useState(0);
   const [position, setPosition] = useState({ x: '80%', y: '70%' });
   const [isDragging, setIsDragging] = useState(false);
+  const [moyenneVitesse, setMoyenneVitesse] = useState(0);
 
   const [size, setSize] = useState(300); // Taille dynamique
 
   const collectionName = sessionStorage.getItem('collectionName') || '/';
+
+  useEffect(() => {
+    const pointsRef = ref(db, collectionName);
+    const unsubscribe = onValue(
+      pointsRef,
+      (snapshot) => {
+        const fetchedData = [];
+        snapshot.forEach((childSnapshot) => {
+          fetchedData.push({
+            id: childSnapshot.key,
+            ...childSnapshot.val(),
+          });
+        });
+
+        if (fetchedData.length > 0) {
+          const moyenne = fetchedData.reduce((acc, point) => acc + point.V, 0) / fetchedData.length;
+          setMoyenneVitesse(moyenne);
+        }
+      },
+      (error) => {
+        console.error('Error fetching data: ', error);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [collectionName]);
 
 
 
@@ -57,6 +84,8 @@ function Compteur() {
 
     return () => clearInterval(interval);
   }, [lastPoint, angle]);
+
+
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -179,6 +208,8 @@ function Compteur() {
               Vitesse: {lastPoint.V}
             </p>
           )}
+            <p>Moyenne Générale: {moyenneVitesse.toFixed(2)}</p>
+
         </div>
       </div>
     </div>

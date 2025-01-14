@@ -4,12 +4,13 @@ import '../CSS/header.css';
 import SettingsImage from '../Settings.png';
 import db from '../FireBase/firebase'; // Import de l'instance Firebase
 
-function Header({ toggleCompteur, toggleDonnees, toggleTemperature, toggleAmpereMetre }) {
+function Header({ toggleCompteur, toggleDonnees, toggleTemperature, toggleAmpereMetre, toggleJoulMetre }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompteurVisible, setIsCompteurVisible] = useState(true);
   const [isDonneesVisible, setIsDonneesVisible] = useState(true);
   const [isTemperatureVisible, setIsTemperatureVisible] = useState(true);
   const [isAmpereMetreVisible, setIsAmpereMetreVisible] = useState(true);
+  const [isJoulMetreVisible, setIsJoulMetreVisible] = useState(true);
   const [collectionName, setCollectionName] = useState(
     sessionStorage.getItem('collectionName') || '' // Récupère la valeur initiale depuis le sessionStorage
   );
@@ -43,12 +44,19 @@ function Header({ toggleCompteur, toggleDonnees, toggleTemperature, toggleAmpere
     toggleAmpereMetre(e.target.checked);
   };
 
+  // Fonction pour changer l'état de la visibilité du joulmètre
+  const handleJoulMetreChange = (e) => {
+    setIsJoulMetreVisible(e.target.checked);
+    toggleJoulMetre(e.target.checked);
+  };
+
   // Fonction pour mettre à jour le nom de la collection
   const handleCollectionNameChange = (e) => {
     const newName = e.target.value;
     setCollectionName(newName);
     sessionStorage.setItem('collectionName', newName); // Stocke la valeur dans la session
   };
+  
 
   // Supprimer toutes les données de la collection
   const handleDeleteData = async () => {
@@ -140,6 +148,15 @@ function Header({ toggleCompteur, toggleDonnees, toggleTemperature, toggleAmpere
                 onChange={handleAmpereMetreChange}
               />{' '}
               Afficher Ampèremètre
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                checked={isJoulMetreVisible}
+                onChange={handleJoulMetreChange}
+              />{' '}
+              Afficher Joulmètre
             </label>
             <br />
             <h2>Base de données</h2>

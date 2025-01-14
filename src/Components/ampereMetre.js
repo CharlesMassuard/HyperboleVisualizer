@@ -105,7 +105,7 @@ function AmpereMetre() {
     >
       <h2>Ampére</h2>
       {lastPoint && <p className="ampere">{lastPoint.A}</p>}
-      <h2>Moyenne</h2>
+      <h2>Moyenne Total</h2>
       <p>{moyenneAmperes.toFixed(2)}</p>
     </div>
   );
