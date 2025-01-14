@@ -10,11 +10,13 @@ import Compteur from './Components/compteur';
 import Header from './Components/header';
 import Thermometre from './Components/temperature';
 import CarMap from './Components/map';
+import AmpereMetre from './Components/ampereMetre';
 
 const App = () => {
   const [showCompteur, setShowCompteur] = useState(true);
   const [showDonnees, setShowDonnees] = useState(true);
   const [showTemperature, setShowTemperature] = useState(true);
+  const [showAmpereMetre, setShowAmpereMetre] = useState(true);
   const [points, setPoints] = useState([]);
   const collectionName = sessionStorage.getItem('collectionName') || '/';
 
@@ -56,13 +58,18 @@ const App = () => {
     setShowTemperature(!showTemperature);
   };
 
+  const toggleAmpereMetre = () => {
+    setShowAmpereMetre(!showAmpereMetre);
+  }
+
   return (
     <React.StrictMode>
-      <Header toggleCompteur={toggleCompteur} toggleDonnees={toggleDonnees} toggleTemperature={toggleTemperature} />
+      <Header toggleCompteur={toggleCompteur} toggleDonnees={toggleDonnees} toggleTemperature={toggleTemperature} toggleAmpereMetre={toggleAmpereMetre}/>
       
       {showDonnees && <Donnees />}
       {showCompteur && <Compteur />}
       {showTemperature && <Thermometre />}
+      {showAmpereMetre && <AmpereMetre />}
       
       <div style={{ height: "50vh", width: "50%" }}>
         <CarMap points={points} />

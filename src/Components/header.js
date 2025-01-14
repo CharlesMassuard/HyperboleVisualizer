@@ -4,11 +4,12 @@ import '../CSS/header.css';
 import SettingsImage from '../Settings.png';
 import db from '../FireBase/firebase'; // Import de l'instance Firebase
 
-function Header({ toggleCompteur, toggleDonnees, toggleTemperature }) {
+function Header({ toggleCompteur, toggleDonnees, toggleTemperature, toggleAmpereMetre }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompteurVisible, setIsCompteurVisible] = useState(true);
   const [isDonneesVisible, setIsDonneesVisible] = useState(true);
   const [isTemperatureVisible, setIsTemperatureVisible] = useState(true);
+  const [isAmpereMetreVisible, setIsAmpereMetreVisible] = useState(true);
   const [collectionName, setCollectionName] = useState(
     sessionStorage.getItem('collectionName') || '' // Récupère la valeur initiale depuis le sessionStorage
   );
@@ -34,6 +35,12 @@ function Header({ toggleCompteur, toggleDonnees, toggleTemperature }) {
   const handleTemperatureChange = (e) => {
     setIsTemperatureVisible(e.target.checked);
     toggleTemperature(e.target.checked);
+  };
+
+  // Fonction pour changer l'état de la visibilité de l'ampèremètre
+  const handleAmpereMetreChange = (e) => {
+    setIsAmpereMetreVisible(e.target.checked);
+    toggleAmpereMetre(e.target.checked);
   };
 
   // Fonction pour mettre à jour le nom de la collection
@@ -124,6 +131,15 @@ function Header({ toggleCompteur, toggleDonnees, toggleTemperature }) {
                 onChange={handleTemperatureChange}
               />{' '}
               Afficher Température
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                checked={isAmpereMetreVisible}
+                onChange={handleAmpereMetreChange}
+              />{' '}
+              Afficher Ampèremètre
             </label>
             <br />
             <h2>Base de données</h2>
