@@ -71,7 +71,7 @@ function Donnees() {
         <ul className="donnees-list">
           {data.map((item) => (
             <li key={item.id}>
-              {item.lat} - {item.long} - {item.V}
+              {item.latitude} - {item.longitude} - {item.V}
             </li>
           ))}
         </ul>

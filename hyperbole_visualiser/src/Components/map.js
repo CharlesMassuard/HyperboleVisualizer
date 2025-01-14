@@ -10,18 +10,26 @@ const CarMap = ({ points }) => {
 
   console.log(points[0]);
 
-  const pointsWithLng = points.map((point) => ({
-    lat: point.latitude,
-    lng: point.longitude,
-    time: point.time,
-  }));
+  const pointsWithLng = points.filter(
+    (point) =>
+      point.latitude !== undefined &&
+      point.longitude !== undefined &&
+      !isNaN(point.latitude) &&
+      !isNaN(point.longitude)
+    ).map((point) => ({
+      lat: point.latitude,
+      lng: point.longitude,
+      time: point.time,
+    }));
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         prevIndex < pointsWithLng.length - 1 ? prevIndex + 1 : prevIndex
       );
-      setCurrentTime(pointsWithLng[currentIndex].time);
+      if (currentIndex !== undefined && pointsWithLng[currentIndex] !== undefined) {
+        setCurrentTime(pointsWithLng[currentIndex].time);
+      }
       if (currentIndex < pointsWithLng.length - 1) {
         setIconSize([40, 40]);
       } else {
@@ -32,9 +40,12 @@ const CarMap = ({ points }) => {
     return () => clearInterval(interval);
   }, [pointsWithLng, currentIndex]);
 
-  const currentPoint = pointsWithLng[currentIndex];
-
-  const path2 = pointsWithLng.slice(0, currentIndex + 1);
+  var currentPoint = null;
+  var path2 = [];
+  if (currentIndex !== undefined){
+    currentPoint = pointsWithLng[currentIndex];
+    path2 = pointsWithLng.slice(0, currentIndex + 1);
+  }
 
   // Convertir en JSON
   const path2JSON = JSON.stringify({ path2 }, null, 2);

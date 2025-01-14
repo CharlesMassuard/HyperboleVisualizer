@@ -16,9 +16,10 @@ const App = () => {
   const [showDonnees, setShowDonnees] = useState(true);
   const [showTemperature, setShowTemperature] = useState(true);
   const [points, setPoints] = useState([]);
+  const collectionName = sessionStorage.getItem('collectionName') || '/';
 
   useEffect(() => {
-    const pointsRef = ref(db, '/gps');
+    const pointsRef = ref(db, collectionName);
     const unsubscribe = onValue(
       pointsRef,
       (snapshot) => {
@@ -40,7 +41,7 @@ const App = () => {
     );
   
     return () => unsubscribe();
-  }, []);
+  }, [collectionName]);
     
 
   const toggleCompteur = () => {
