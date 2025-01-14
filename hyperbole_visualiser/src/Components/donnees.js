@@ -24,7 +24,6 @@ function Donnees() {
             ...childSnapshot.val(),
           });
         });
-        console.log("Updated Data:", fetchedData); // Vérifiez les données reçues en temps réel
         setData(fetchedData);
       },
       (error) => {
