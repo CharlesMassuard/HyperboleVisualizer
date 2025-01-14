@@ -7,10 +7,12 @@ function Donnees() {
   const [data, setData] = useState([]);
   const [position, setPosition] = useState({ x: '5%', y: '70%' }); // Position initiale
   const [isDragging, setIsDragging] = useState(false);
+  const collectionName = sessionStorage.getItem('collectionName') || '/';
+
 
   // Gestion des données Firebase
   useEffect(() => {
-    const pointsRef = ref(db, '/data');
+    const pointsRef = ref(db, collectionName);
 
     const unsubscribe = onValue(
       pointsRef,
@@ -30,7 +32,7 @@ function Donnees() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [collectionName]);
 
   // Gestion des déplacements
   const handleMouseDown = (e) => {

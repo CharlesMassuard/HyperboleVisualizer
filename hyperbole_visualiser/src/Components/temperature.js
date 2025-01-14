@@ -7,9 +7,12 @@ function Thermometre() {
   const [lastPoint, setLastPoint] = useState(null);
   const [position, setPosition] = useState({ x: '50%', y: '70%' });
   const [isDragging, setIsDragging] = useState(false);
+  const collectionName = sessionStorage.getItem('collectionName') || '/';
+
+
 
   useEffect(() => {
-    const pointsRef = ref(db, '/data');
+    const pointsRef = ref(db, collectionName);
     const unsubscribe = onValue(
       pointsRef,
       (snapshot) => {
@@ -31,7 +34,7 @@ function Thermometre() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [collectionName]);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
