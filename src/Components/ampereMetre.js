@@ -63,7 +63,9 @@ function AmpereMetre() {
   }, [collectionName]);
 
   const handleMouseDown = (e) => {
-    // Calculer le décalage entre la souris et la position du thermomètre
+    // Désactive la sélection du texte pendant le déplacement
+    document.body.style.userSelect = 'none';
+
     const rect = e.target.getBoundingClientRect();
     setOffset({
       x: e.clientX - rect.left,
@@ -83,6 +85,8 @@ function AmpereMetre() {
   };
 
   const handleMouseUp = () => {
+    // Réactive la sélection de texte après le déplacement
+    document.body.style.userSelect = 'auto';
     setIsDragging(false);
   };
 
@@ -97,18 +101,12 @@ function AmpereMetre() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp} // S'assure que le déplacement cesse si la souris quitte l'élément
+      onMouseDown={handleMouseDown}
     >
-      <div
-        className="ampere-box"
-        onMouseDown={handleMouseDown}
-        style={{ cursor: 'grab' }}
-      >
-        <h2>Ampére</h2>
-        {lastPoint && <p className="ampere">{lastPoint.A}</p>}
-        <h2>Moyenne</h2>
-        <p>{moyenneAmperes.toFixed(2)}</p>
-
-      </div>
+      <h2>Ampére</h2>
+      {lastPoint && <p className="ampere">{lastPoint.A}</p>}
+      <h2>Moyenne</h2>
+      <p>{moyenneAmperes.toFixed(2)}</p>
     </div>
   );
 }
