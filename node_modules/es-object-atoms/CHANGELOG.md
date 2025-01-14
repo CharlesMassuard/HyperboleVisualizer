@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.1](https://github.com/ljharb/es-object-atoms/compare/v1.0.0...v1.0.1) - 2025-01-13
+
+### Commits
+
+- [Dev Deps] update `@ljharb/eslint-config`, `@ljharb/tsconfig`, `@types/tape`, `auto-changelog`, `tape` [`38ab9eb`](https://github.com/ljharb/es-object-atoms/commit/38ab9eb00b62c2f4668644f5e513d9b414ebd595)
+- [types] improve types [`7d1beb8`](https://github.com/ljharb/es-object-atoms/commit/7d1beb887958b78b6a728a210a1c8370ab7e2aa1)
+- [Tests] replace `aud` with `npm audit` [`25863ba`](https://github.com/ljharb/es-object-atoms/commit/25863baf99178f1d1ad33d1120498db28631907e)
+- [Dev Deps] add missing peer dep [`c012309`](https://github.com/ljharb/es-object-atoms/commit/c0123091287e6132d6f4240496340c427433df28)
+
 ## v1.0.0 - 2024-03-16
 
 ### Commits
