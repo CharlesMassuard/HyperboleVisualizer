@@ -7,7 +7,7 @@ function Donnees() {
   const [data, setData] = useState([]);
   const [position, setPosition] = useState({ x: '5%', y: '70%' }); // Position initiale
   const [isDragging, setIsDragging] = useState(false);
-  const collectionName = sessionStorage.getItem('collectionName') || '/';
+  const collectionName = sessionStorage.getItem('collectionName') || '/data';
 
 
   // Gestion des données Firebase

@@ -7,7 +7,7 @@ function Thermometre() {
   const [lastPoint, setLastPoint] = useState(null);
   const [position, setPosition] = useState({ x: '50%', y: '70%' });
   const [isDragging, setIsDragging] = useState(false);
-  const collectionName = sessionStorage.getItem('collectionName') || '/';
+  const collectionName = sessionStorage.getItem('collectionName') || '/data';
 
 
 

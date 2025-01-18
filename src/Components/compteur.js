@@ -12,7 +12,7 @@ function Compteur() {
 
   const [size, setSize] = useState(300); // Taille dynamique
 
-  const collectionName = sessionStorage.getItem('collectionName') || '/';
+  const collectionName = sessionStorage.getItem('collectionName') || '/data';
 
   useEffect(() => {
     const pointsRef = ref(db, collectionName);

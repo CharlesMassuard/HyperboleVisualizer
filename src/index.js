@@ -20,7 +20,7 @@ const App = () => {
   const [showAmpereMetre, setShowAmpereMetre] = useState(true);
   const [showJoulMetre, setShowJoulMetre] = useState(true);
   const [points, setPoints] = useState([]);
-  const collectionName = sessionStorage.getItem('collectionName') || '/';
+  const collectionName = sessionStorage.getItem('collectionName') || '/data';
 
   useEffect(() => {
     const pointsRef = ref(db, collectionName);

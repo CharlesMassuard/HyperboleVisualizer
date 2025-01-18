@@ -9,7 +9,7 @@ function JoulMetre() {
     const [position, setPosition] = useState({ x: 65, y: 30 }); // Utilisation de pourcentages pour la position
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 }); // Pour stocker le décalage entre la souris et l'élément
-    const collectionName = sessionStorage.getItem('collectionName') || '/';
+    const collectionName = sessionStorage.getItem('collectionName') || '/data';
     const [moyenneJoules, setMoyenneJoules] = useState(0);
 
     useEffect(() => {
