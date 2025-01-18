@@ -104,7 +104,7 @@ function JoulMetre() {
         onMouseLeave={handleMouseUp} // S'assure que le déplacement cesse si la souris quitte l'élément
         onMouseDown={handleMouseDown}
         >
-            <h2>Joul</h2>
+            <h2>Joules</h2>
             {lastPoint && <p className="ampere">{lastPoint.J}</p>}
             <h2>Moyenne Total</h2>
             <p>{moyenneJoules.toFixed(2)}</p>

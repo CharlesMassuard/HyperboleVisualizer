@@ -103,7 +103,7 @@ function AmpereMetre() {
       onMouseLeave={handleMouseUp} // S'assure que le déplacement cesse si la souris quitte l'élément
       onMouseDown={handleMouseDown}
     >
-      <h2>Ampére</h2>
+      <h2>Ampères</h2>
       {lastPoint && <p className="ampere">{lastPoint.A}</p>}
       <h2>Moyenne Total</h2>
       <p>{moyenneAmperes.toFixed(2)}</p>
